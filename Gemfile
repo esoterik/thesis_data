@@ -16,6 +16,7 @@ gem "suspenders"
 gem "uglifier"
 gem 'octokit', '~> 4.8'
 gem 'graphql-client', '~> 0.12'
+gem 'erubis'
 
 group :development do
   gem "listen"
