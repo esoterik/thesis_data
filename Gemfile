@@ -14,7 +14,8 @@ gem "rails", "~> 5.1.4"
 gem "recipient_interceptor"
 gem "suspenders"
 gem "uglifier"
-
+gem 'octokit', '~> 4.8'
+gem 'graphql-client', '~> 0.12'
 
 group :development do
   gem "listen"
@@ -32,6 +33,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'rspec-rails', '~> 3.7'
   gem "formulaic"
   gem "launchy"
   gem "simplecov", require: false
