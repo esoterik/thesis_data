@@ -1,6 +1,6 @@
 require 'octokit'
 
-class CommitsFetcher
+class CommitsFetcherREST
   ACCESS_TOKEN_FILE = 'github_access_token'
   def initialize(repo)
     @repo = repo
@@ -12,18 +12,6 @@ class CommitsFetcher
   def save_commits
     commits = client.commits "#{repo.owner}/#{repo.name}"
     save_commits!(commits)
-    # last_response = client.last_response
-    # until last_response.rels[:next].nil? || client.rate_limit == 0
-    #   commits = last_response.rels[:next].get.data
-    #   save_commits!(commits)
-    #   puts Commit.last.time
-    #   last_response = client.last_response
-    # end
-    #comment
-  rescue ActiveRecord::RecordInvalid
-    binding.pry
-    puts 'caught error'
-    #comment
   end
 
   private
