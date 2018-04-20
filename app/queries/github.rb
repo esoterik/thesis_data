@@ -11,4 +11,22 @@ module Github
   Schema = GraphQL::Client.load_schema('github_graphql_schema.json')
 
   Client = GraphQL::Client.new(schema: Schema, execute: HTTPAdapter)
+
+  RateLimitQuery = Client.parse <<-'GRAPHQL'
+  {
+    viewer {
+      login
+    }
+    rateLimit {
+      limit
+      cost
+      remaining
+      resetAt
+    }
+  }
+  GRAPHQL
+
+  def self.rate_limit_check
+    Client.query(RateLimitQuery)
+  end
 end

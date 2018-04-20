@@ -9,7 +9,8 @@ class RepoQuery
   end
 
   def save_new_repo
-    repo = Repo.create!(name: repo_data[:name], languages: repo_data[:language])
+    repo = Repo.create!(name: repo_data[:name], languages: repo_data[:language],
+                        owner: repo_data[:owner][:login])
     contributor_data.each do |c|
       break if c[:contributions] < 10
       user = User.find_by(username: c[:login])
