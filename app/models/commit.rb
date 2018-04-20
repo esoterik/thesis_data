@@ -5,11 +5,14 @@ class Commit < ApplicationRecord
   validates :repo, presence: true
   validates :message, presence: true
   validates :time, presence: true
+  validates :sha, presence: true, uniqueness: { scope: :repo }
   validates :additions, numericality: { only_integer: true,
-                                        greater_than_or_equal_to: 0 }
+                                        greater_than_or_equal_to: 0,
+                                        allow_nil: true }
   validates :deletions, numericality: { only_integer: true,
-                                        greater_than_or_equal_to: 0 }
-  validates :diff, numericality: { only_integer: true }
+                                        greater_than_or_equal_to: 0,
+                                        allow_nil: true }
+  validates :diff, numericality: { only_integer: true, allow_nil: true }
 
   # TODO: null user object
 end

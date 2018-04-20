@@ -1,44 +1,41 @@
 require 'octokit'
 
 class CommitsFetcher
+  ACCESS_TOKEN_FILE = 'github_access_token'
   def initialize(repo)
     @repo = repo
+    Octokit.auto_paginate = true
     @client = Octokit::Client.new(access_token: File.read(ACCESS_TOKEN_FILE).chomp,
                                   per_page: 100)
-    @name_vars = { 'owner' => repo.owner, 'name' => repo.name }
   end
 
   def save_commits
-    first_five = get_commits(first_five_commits)
-    # first_five.each do |c|
-    #   user = User.find_by(username: c.dig(*%w(author user login)))
-    #   diff = c['additions'] - c['deletions']
-    #   Commit.create!(user: user, repo: repo, message: c['message'],
-    #                  diff: diff, additions: c['additions'],
-    #                  deletions: c['deletions'],
-    #                  time: Date.iso8601(c['committedDate']))
+    commits = client.commits "#{repo.owner}/#{repo.name}"
+    save_commits!(commits)
+    # last_response = client.last_response
+    # until last_response.rels[:next].nil? || client.rate_limit == 0
+    #   commits = last_response.rels[:next].get.data
+    #   save_commits!(commits)
+    #   puts Commit.last.time
+    #   last_response = client.last_response
     # end
-    binding.pry    
+    #comment
+  rescue ActiveRecord::RecordInvalid
+    binding.pry
+    puts 'caught error'
     #comment
   end
 
   private
   
-  attr_reader :name_vars, :repo
+  attr_reader :client, :repo
 
-  def later_commits(date)
-    Github::Client.query(Query, variables: name_vars.merge('before' => date))
+  def save_commits!(commits)
+    commits.each do |c|
+      user = User.find_by(username: c[:author][:login]) if c[:author]
+      Commit.create!(user: user, repo: repo, sha: c[:sha],
+                     time: c[:commit][:author][:date],
+                     message: c[:commit][:message])
+    end
   end
-
-  def first_five_commits
-    @first_five_query ||= Github::Client.query(FirstQuery,
-                                               variables: name_vars)
-    @first_five_query.original_hash
-  end
-
-  def get_commits(hash)
-    hash.dig('data', 'repository', 'ref', 'target', 'history',
-             'edges').map { |h| h['node'] }
-  end
-
 end
