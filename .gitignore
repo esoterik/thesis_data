@@ -17,3 +17,4 @@
 /tmp/*
 /yarn-error.log
 github_access_token
+/db/data.yml
