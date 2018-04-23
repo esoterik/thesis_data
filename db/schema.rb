@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423060133) do
+ActiveRecord::Schema.define(version: 20180423073711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20180423060133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "time"
+    t.integer "category"
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["conversation_id"], name: "index_comments_on_conversation_id"
   end
@@ -67,7 +68,6 @@ ActiveRecord::Schema.define(version: 20180423060133) do
   create_table "conversations", force: :cascade do |t|
     t.bigint "issue_id"
     t.bigint "pull_request_id"
-    t.integer "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["issue_id"], name: "index_conversations_on_issue_id"
@@ -100,6 +100,10 @@ ActiveRecord::Schema.define(version: 20180423060133) do
     t.bigint "repo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "additions"
+    t.integer "deletions"
+    t.integer "changed_files"
+    t.integer "diff"
     t.index ["author_id"], name: "index_pull_requests_on_author_id"
     t.index ["repo_id"], name: "index_pull_requests_on_repo_id"
   end

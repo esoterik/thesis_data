@@ -2,10 +2,8 @@ class Conversation < ApplicationRecord
   belongs_to :issue, optional: true
   belongs_to :pull_request, optional: true
 
-  has_many :comments
+  has_many :comments, dependent: :destroy
   has_many :participants, through: :comments, class_name: 'User'
-
-  enum type: %i(comment review)
 
   validate :belongs_to_issue_or_pr
 

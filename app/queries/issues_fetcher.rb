@@ -80,7 +80,6 @@ class IssuesFetcher
           }
         }
       }
-      }
     }
   GRAPHQL
 
@@ -116,7 +115,7 @@ class IssuesFetcher
       results = Github::Client.query(Query,
                                      variables: name_vars.merge(after: next_id))
       tries = 0
-      rescue NoMethodError
+      rescue NoMethodError => e
         puts "Last processed cursor: #{processed_cursors.last}"
         puts "Current next_id value: #{next_id}"
         if processed_cursors.last == next_id && tries < 5
@@ -148,9 +147,10 @@ class IssuesFetcher
   end
 
   def comments_from_issue!(issue_hash, issue)
-    conversation = Conversation.create!(issue: issue, type: review)
+    conversation = Conversation.create!(issue: issue, category: 'comment')
     comments_hashes = issue_hash.dig(*%w(comments nodes))
     comments_hashes.each do |c|
+      c = delete_null_bytes(c)
       auth = users[dig_user(c)]
       auth = auth.first if auth
       Comment.create!(conversation: conversation, author: auth, body: c['body'],
@@ -167,16 +167,29 @@ class IssuesFetcher
     end
   end
 
+  def delete_null_bytes(hash)
+    hash.to_a.map do |k, v| 
+      v = if v.is_a? String
+            v.delete("\u0000")
+          else
+            v
+          end
+      [k, v]
+    end.to_h
+  end
+
   def create_issues
     issues.each do |i|
       user = users[dig_user(i)]
       user = user.first if user
       ActiveRecord::Base.transaction do
+        i = delete_null_bytes(i)
+        closed = DateTime.iso8601(i['closedAt']) if i['closedAt']
         issue = Issue.create!(author: user, repo: repo, title: i['title'],
                              body: i['body'], status: i['state'].downcase,
                              number: i['number'],
                              opened: DateTime.iso8601(i['createdAt']),
-                             closed: DateTime.iso8601(i['closedAt']))
+                             closed: closed)
         comments_from_issue!(i, issue)
         assignees_from_issue!(i, issue)
       end
