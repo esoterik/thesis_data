@@ -5,6 +5,8 @@ class Conversation < ApplicationRecord
   has_many :comments
   has_many :participants, through: :comments, class_name: 'User'
 
+  enum type: %i(comment review)
+
   validate :belongs_to_issue_or_pr
 
   private
