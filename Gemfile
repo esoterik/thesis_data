@@ -17,6 +17,7 @@ gem "uglifier"
 gem 'octokit', '~> 4.8'
 gem 'graphql-client', '~> 0.12'
 gem 'erubis'
+gem 'yaml_db'
 
 group :development do
   gem "listen"

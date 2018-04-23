@@ -14,7 +14,7 @@ class RepoQuery
     contributor_data.each do |c|
       break if c[:contributions] < 10
       user = User.find_by(username: c[:login])
-      user ||= User.create!(username: c[:login])
+      user ||= User.create(username: c[:login])
       Contribution.create!(user: user, repo: repo, count: c[:contributions])
     end
   end

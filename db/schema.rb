@@ -10,10 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420122502) do
+ActiveRecord::Schema.define(version: 20180423050328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assignments", force: :cascade do |t|
+    t.bigint "issue_id"
+    t.bigint "pull_request_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issue_id"], name: "index_assignments_on_issue_id"
+    t.index ["pull_request_id"], name: "index_assignments_on_pull_request_id"
+    t.index ["user_id"], name: "index_assignments_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "conversation_id"
+    t.bigint "author_id"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["conversation_id"], name: "index_comments_on_conversation_id"
+  end
 
   create_table "commits", force: :cascade do |t|
     t.datetime "time", null: false
@@ -36,8 +57,50 @@ ActiveRecord::Schema.define(version: 20180420122502) do
     t.bigint "repo_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "first_pr"
+    t.datetime "first_commit"
     t.index ["repo_id"], name: "index_contributions_on_repo_id"
     t.index ["user_id"], name: "index_contributions_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.bigint "issue_id"
+    t.bigint "pull_request_id"
+    t.integer "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issue_id"], name: "index_conversations_on_issue_id"
+    t.index ["pull_request_id"], name: "index_conversations_on_pull_request_id"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.datetime "opened"
+    t.datetime "closed"
+    t.integer "status"
+    t.integer "number"
+    t.bigint "author_id"
+    t.bigint "repo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_issues_on_author_id"
+    t.index ["repo_id"], name: "index_issues_on_repo_id"
+  end
+
+  create_table "pull_requests", force: :cascade do |t|
+    t.integer "status"
+    t.datetime "opened"
+    t.datetime "closed"
+    t.string "title"
+    t.text "body"
+    t.integer "number"
+    t.bigint "author_id"
+    t.bigint "repo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_pull_requests_on_author_id"
+    t.index ["repo_id"], name: "index_pull_requests_on_repo_id"
   end
 
   create_table "repos", force: :cascade do |t|

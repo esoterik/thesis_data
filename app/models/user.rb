@@ -3,5 +3,5 @@ class User < ApplicationRecord
   has_many :contributions
   has_many :repos, through: :contributions
 
-  validates :username, presence: true
+  validates :username, presence: true, uniqueness: true
 end
