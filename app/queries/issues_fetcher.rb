@@ -91,7 +91,7 @@ class IssuesFetcher
     @commits = []
   end
 
-  def save_issues
+  def run
     results = if start_point
                 Github::Client.query(Query,
                                      variables: name_vars.merge(after: start_point))
@@ -127,10 +127,10 @@ class IssuesFetcher
                                          variables: name_vars.merge(after: next_id))
           next
         end
-        binding.pry
-        next_page = false
+        return next_id
       end
     end
+    return 'Complete'
   end
 
   private

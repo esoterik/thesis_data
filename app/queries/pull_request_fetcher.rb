@@ -1,6 +1,7 @@
 require 'graphql/client'
 
 class PullRequestFetcher
+  # next: Y3Vyc29yOnYyOpHOBTOk9Q==
   FirstQuery = Github::Client.parse <<-'GRAPHQL'
     query($owner: String!, $name: String!) {
       repository(owner: $owner, name: $name) {
@@ -116,7 +117,7 @@ class PullRequestFetcher
     @prs = []
   end
 
-  def save_prs
+  def run
     results = if start_point
                 Github::Client.query(Query,
                                      variables: name_vars.merge(after: start_point))
@@ -152,10 +153,10 @@ class PullRequestFetcher
                                          variables: name_vars.merge(after: next_id))
           next
         end
-        binding.pry
-        next_page = false
+        return next_id
       end
     end
+    return 'Complete'
   end
 
   private
