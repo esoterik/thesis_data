@@ -3,7 +3,7 @@ class Conversation < ApplicationRecord
   belongs_to :pull_request, optional: true
 
   has_many :comments, dependent: :destroy
-  has_many :participants, through: :comments, class_name: 'User'
+  has_many :participants, through: :comments, source: 'author'
 
   validate :belongs_to_issue_or_pr
 

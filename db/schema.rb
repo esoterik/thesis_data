@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426033416) do
+ActiveRecord::Schema.define(version: 20180426050027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20180426033416) do
     t.bigint "pull_request_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "excluded"
     t.index ["issue_id"], name: "index_conversations_on_issue_id"
     t.index ["pull_request_id"], name: "index_conversations_on_pull_request_id"
   end
@@ -134,6 +135,7 @@ ActiveRecord::Schema.define(version: 20180426033416) do
     t.string "first_name"
     t.string "blog"
     t.decimal "gender_prob"
+    t.boolean "excluded"
   end
 
 end
