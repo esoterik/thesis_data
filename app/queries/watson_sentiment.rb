@@ -17,9 +17,13 @@ class WatsonSentiment
   def analyze(text)
     result = conn.get 'natural-language-understanding/api/v1/analyze',
       { version: '2018-03-16', text: text, features: 'sentiment,emotion' }
+    return {} unless result.status == 200
     hash = JSON.parse result.env.body
     sentiment_score = hash.dig(*%w(sentiment document score))
     { 'sentiment' => sentiment_score }.merge(hash.dig(*%w(emotion document emotion)))
+  rescue TypeError
+    # happens when the comment is mostly a link / other non-text
+    return {}
   end
 
   private

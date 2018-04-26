@@ -14,5 +14,9 @@ class Commit < ApplicationRecord
                                         allow_nil: true }
   validates :diff, numericality: { only_integer: true, allow_nil: true }
 
+  def self.before(date)
+    where('time < ?', date)
+  end
+
   # TODO: null user object
 end
