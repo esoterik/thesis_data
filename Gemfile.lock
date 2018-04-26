@@ -240,6 +240,7 @@ DEPENDENCIES
   bundler-audit (>= 0.5.0)
   dotenv-rails
   erubis
+  faraday (~> 0.15)
   formulaic
   graphql-client (~> 0.12)
   launchy

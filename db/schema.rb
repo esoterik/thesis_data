@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180425234058) do
+ActiveRecord::Schema.define(version: 20180426033416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,11 @@ ActiveRecord::Schema.define(version: 20180425234058) do
     t.datetime "updated_at", null: false
     t.datetime "first_pr"
     t.datetime "first_commit"
+    t.datetime "last_commit"
+    t.boolean "active"
+    t.decimal "length"
+    t.decimal "frequency"
+    t.decimal "diff"
     t.index ["repo_id"], name: "index_contributions_on_repo_id"
     t.index ["user_id"], name: "index_contributions_on_user_id"
   end
@@ -128,6 +133,7 @@ ActiveRecord::Schema.define(version: 20180425234058) do
     t.string "company"
     t.string "first_name"
     t.string "blog"
+    t.decimal "gender_prob"
   end
 
 end
