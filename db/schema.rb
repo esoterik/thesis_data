@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426050027) do
+ActiveRecord::Schema.define(version: 20180426064845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(version: 20180426050027) do
     t.datetime "updated_at", null: false
     t.datetime "time"
     t.integer "category"
+    t.decimal "sentiment"
+    t.decimal "sadness"
+    t.decimal "joy"
+    t.decimal "fear"
+    t.decimal "disgust"
+    t.decimal "anger"
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["conversation_id"], name: "index_comments_on_conversation_id"
   end
