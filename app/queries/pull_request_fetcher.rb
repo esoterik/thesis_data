@@ -1,7 +1,6 @@
 require 'graphql/client'
 
 class PullRequestFetcher
-  # next: Y3Vyc29yOnYyOpHOBTOk9Q==
   FirstQuery = Github::Client.parse <<-'GRAPHQL'
     query($owner: String!, $name: String!) {
       repository(owner: $owner, name: $name) {
