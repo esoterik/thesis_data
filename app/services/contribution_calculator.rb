@@ -8,6 +8,7 @@ class ContributionCalculator
     contribs.find_each do |c|
       commits = c.user.commits.where(repo: c.repo).order(:time)
       prs = c.user.pull_requests.where(repo: c.repo).order(:opened)
+      issues = c.user.issues.where(repo: c.repo).order(:opened)
       next if prs.empty?
       attrs = dates(c, commits, prs)
       attrs[:total_adds] = commits.sum(:additions)
@@ -18,6 +19,7 @@ class ContributionCalculator
       attrs[:total_prs] = prs.count
       attrs[:first_pr_status] = prs.first.status
       attrs[:last_pr_status] = prs.last.status unless prs.count < 2
+      attrs[:first_issue_opened] = issues.first.opened unless issues.empty?
       c.update!(attrs)
     end
   end
