@@ -1,7 +1,7 @@
 
 class UserSentimentCalculator
   def initialize(users = nil)
-    @users = users || User.includes(:conversations).where(excluded: false)
+    @users = users || User.includes(:conversations)
   end
 
   def run
@@ -17,18 +17,22 @@ class UserSentimentCalculator
   attr_reader :users
 
   def sentiment_toward_notable(user)
-    s = []
+    sentiments = []
     user.conversations.includes(:comments).find_each do |c|
-      s << c.comments.where.not(author_id: [user.id, nil]).average(:sentiment)
+      avg = c.comments.where.not(author_id: [user.id, nil]).average(:sentiment)
+      sentiments << avg
     end
-    s.sum / s.size.to_f
+    sentiments.compact!
+    sentiments.sum / sentiments.size.to_f
   end
 
   def sentiment_toward_other(user)
-    s = []
+    sentiments = []
     user.conversations.includes(:comments).find_each do |c|
-      s << c.comments.where(author_id: nil).average(:sentiment)
+      avg = c.comments.where(author_id: nil).average(:sentiment)
+      sentiments << avg
     end
-    s.sum / s.size.to_f
+    sentiments.compact!
+    sentiments.sum / sentiments.size.to_f
   end
 end
