@@ -19,6 +19,7 @@ gem 'graphql-client', '~> 0.12'
 gem 'erubis'
 gem 'yaml_db'
 gem 'faraday', '~> 0.15'
+gem 'sentimental', '~> 1.4'
 
 group :development do
   gem "listen"

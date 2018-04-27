@@ -1,20 +1,26 @@
+require 'uri'
+
 class SentimentAnalysis
-  def initialize(comments)
+  def initialize(comments, api = SentimentalRunner.new)
     @comments = comments
-    @api = WatsonSentiment.new
+    @api = api
   end
 
   def run
     comments.find_each do |c|
-      # skip if we've already calculated the sentiment
-      next unless c.sentiment.nil?
-      # skip if outside the limits of watson's API
-      next unless c.body.length > 15 && c.body.length < 10000
-      c.update!(api.analyze c.body)
+      next if c.length > 10000 # for sanity, cuts out less than 1000 comments
+      url_removed = strip_urls(c.body)
+      c.update!(sentiment: api.analyze(url_removed))
+    rescue
+      puts "failed to calculate sentiment for #{c.id}"
     end
   end
 
   private
-  
+
   attr_reader :comments, :api
+
+  def strip_urls(text)
+    text.sub(URI.regexp, '')
+  end
 end

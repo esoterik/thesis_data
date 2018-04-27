@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426064845) do
+ActiveRecord::Schema.define(version: 20180427034858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20180426064845) do
     t.decimal "fear"
     t.decimal "disgust"
     t.decimal "anger"
+    t.integer "length"
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["conversation_id"], name: "index_comments_on_conversation_id"
   end
@@ -72,6 +73,16 @@ ActiveRecord::Schema.define(version: 20180426064845) do
     t.decimal "length"
     t.decimal "frequency"
     t.decimal "diff"
+    t.decimal "avg_commit_size"
+    t.datetime "last_pr"
+    t.integer "first_pr_status"
+    t.integer "last_pr_status"
+    t.integer "commits_at_first_pr"
+    t.boolean "more_than_a_year"
+    t.integer "total_commits"
+    t.integer "total_prs"
+    t.integer "total_adds"
+    t.integer "total_dels"
     t.index ["repo_id"], name: "index_contributions_on_repo_id"
     t.index ["user_id"], name: "index_contributions_on_user_id"
   end
@@ -142,6 +153,9 @@ ActiveRecord::Schema.define(version: 20180426064845) do
     t.string "blog"
     t.decimal "gender_prob"
     t.boolean "excluded"
+    t.decimal "sentiment_toward_notable"
+    t.decimal "sentiment_toward_other"
+    t.decimal "sentiment_by"
   end
 
 end

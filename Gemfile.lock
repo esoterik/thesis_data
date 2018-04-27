@@ -190,6 +190,7 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    sentimental (1.4.1)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -256,6 +257,7 @@ DEPENDENCIES
   rails (~> 5.1.4)
   recipient_interceptor
   rspec-rails (~> 3.7)
+  sentimental (~> 1.4)
   simplecov
   spring
   suspenders
